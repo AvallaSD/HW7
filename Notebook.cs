@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Homework_07
 {
     /// <summary>
-    /// Класс, содержащий в себе заметки, события и расписания и методы работы с ними.
+    /// Класс, содержащий в себе заметки и методы работы с ними.
     /// </summary>
     class Notebook
     {
@@ -20,6 +20,9 @@ namespace Homework_07
             Index, Date, Caption, Description, Author, Category
         }
 
+        /// <summary>
+        /// Перечисление режимов чтения: добавление и замещение
+        /// </summary>
         public enum ReadMode
         {
             Add,
@@ -31,6 +34,9 @@ namespace Homework_07
         /// </summary>
         public Note[] Notes { get; private set; }
 
+        /// <summary>
+        /// Конструктор. Инициализирует пустой ежедневник
+        /// </summary>
         public Notebook()
         {
             Notes = new Note[0];         
@@ -40,7 +46,7 @@ namespace Homework_07
         /// Печать заметок в файл
         /// </summary>
         /// <param name="path"></param>
-        public void PrintInFile(string path = "input.txt")
+        public void PrintInFile(string path = "output.txt")
         {
             using (StreamWriter writer = new StreamWriter(path))
             {
@@ -52,20 +58,38 @@ namespace Homework_07
         }
 
         /// <summary>
-        /// Загружает заметки из файла
+        /// Загружает заметки из файла "input.txt" в соответствии с выбранным режимом
+        /// </summary>
+        /// <param name="mode"></param>
+        public void ReadFromFile(ReadMode mode)
+        {
+            ReadFromFile("input.txt", mode, DateTime.MinValue, DateTime.MaxValue);
+        }
+
+        /// <summary>
+        /// Загружает заметки из файла, имеющего указанный путь. Выбор режима загрузки: добавить или заменить.
         /// </summary>
         /// <param name="path">Путь к файлу</param>
-        public void ReadFromFile(ReadMode mode, string path = "")
+        /// <param name="mode">Режим загрузки</param>
+        public void ReadFromFile(string path, ReadMode mode)
+        {
+            ReadFromFile(path, mode, DateTime.MinValue, DateTime.MaxValue);
+        }
+
+        /// <summary>
+        /// Загружает заметки из файла, имеющего указанный путь. Выбор режима загрузки: добавить или заменить. Выбор диапазона времени и дат
+        /// </summary>
+        /// <param name="path">Путь к файлу</param>
+        /// <param name="mode">Режим загрузки</param>
+        /// <param name="dateFrom">Дата и время От</param>
+        /// <param name="dateTo">Дата и время До</param>
+        public void ReadFromFile(string path, ReadMode mode, DateTime dateFrom, DateTime dateTo)
         {
             if (mode == ReadMode.Replace)
             {
-                Notes = new Note[0];
-                path = "input.txt";
+                Notes = new Note[0];              
             }
-            else
-            {
-                path = "add.txt";
-            }
+           
             using (StreamReader reader = new StreamReader(path))
             {
                 while (!reader.EndOfStream)
@@ -87,26 +111,19 @@ namespace Homework_07
             }
         }
 
-
         /// <summary>
         /// Добавление заметки
         /// </summary>
-        public void AddNote()
+        public void AddNote(int noteIndex,
+                            DateTime noteDateTime,
+                            string noteCaption,
+                            string noteDescription,
+                            string noteAuthor,
+                            string noteCategory)
         {
-            int noteIndex = Notes.Length;
-            Console.WriteLine($"Добавление записи: Запись №{noteIndex}");
-            Console.Write($"Введите время: ");
-            DateTime noteDataTime = DateTime.Parse(Console.ReadLine());
-            Console.Write($"Введите название заметки: ");
-            string noteCaption = Console.ReadLine();
-            Console.Write($"Введите описание заметки: ");
-            string noteDescription = Console.ReadLine();
-            Console.Write($"Введите автора заметки: ");
-            string noteAuthor = Console.ReadLine();
-            Console.Write($"Введите категорию заметки: ");
-            string noteCategory = Console.ReadLine();
+            
 
-            Note note = new Note(noteIndex, noteDataTime, noteCaption, noteDescription, noteAuthor, noteCategory);
+            Note note = new Note(noteIndex, noteDateTime, noteCaption, noteDescription, noteAuthor, noteCategory);
             Notes = Notes.Append(note).ToArray();
         }
 

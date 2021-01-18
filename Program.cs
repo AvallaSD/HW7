@@ -29,7 +29,8 @@ namespace Homework_07
             Notebook notebook = new Notebook();
             notebook.ReadFromFile(Notebook.ReadMode.Replace);
             PrintNotes(notebook.Notes);
-            notebook.DeleteByIndex(2);
+            Console.ReadKey();
+            notebook.ReadFromFile(Notebook.ReadMode.Add, "add.txt");
             PrintNotes(notebook.Notes);
             Console.ReadKey();
         }
@@ -42,5 +43,24 @@ namespace Homework_07
                 Console.WriteLine($"Заметка №{note.Index}. {note.Date}. {note.Caption}\n{note.Description}\nАвтор:{note.Author}\nКатегория:{note.Category}\n\n");
             }
         }
+
+        public static void AddNote(Notebook notebook)
+        {
+            int noteIndex = notebook.Notes.Length;
+            Console.WriteLine($"Добавление записи: Запись №{noteIndex}");
+            Console.Write($"Введите время: ");
+            DateTime noteDataTime = DateTime.Parse(Console.ReadLine());
+            Console.Write($"Введите название заметки: ");
+            string noteCaption = Console.ReadLine();
+            Console.Write($"Введите описание заметки: ");
+            string noteDescription = Console.ReadLine();
+            Console.Write($"Введите автора заметки: ");
+            string noteAuthor = Console.ReadLine();
+            Console.Write($"Введите категорию заметки: ");
+            string noteCategory = Console.ReadLine();
+
+            notebook.AddNote(noteIndex, noteDataTime, noteCaption, noteDescription, noteAuthor, noteCategory);
+        }
     }
+
 }
