@@ -20,27 +20,55 @@ namespace Homework_07
             Index, Date, Caption, Description, Author, Category
         }
 
-        /// <summary>
-        /// Массив записок
-        /// </summary>
-        private Note[] notes;
-
-        public Notebook()
+        public enum ReadMode
         {
-            notes = new Note[0];
-            
+            Add,
+            Replace
         }
 
         /// <summary>
-        /// Загружает заметки из файла. ПРОВЕРИТЬ!!!
+        /// Массив записок
+        /// </summary>
+        public Note[] Notes { get; private set; }
+
+        public Notebook()
+        {
+            Notes = new Note[0];         
+        }
+
+        /// <summary>
+        /// Печать заметок в файл
+        /// </summary>
+        /// <param name="path"></param>
+        public void PrintInFile(string path = "input.txt")
+        {
+            using (StreamWriter writer = new StreamWriter(path))
+            {
+                foreach (var note in Notes)
+                {
+                    writer.WriteLine($"Заметка №{note.Index}. {note.Date}. {note.Caption}\n{note.Description}\nАвтор:{note.Author}\nКатегория:{note.Category}\n\n");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Загружает заметки из файла
         /// </summary>
         /// <param name="path">Путь к файлу</param>
-        public void ReadFromFile(string path = "input.txt")
+        public void ReadFromFile(ReadMode mode, string path = "")
         {
-            notes = new Note[0];
+            if (mode == ReadMode.Replace)
+            {
+                Notes = new Note[0];
+                path = "input.txt";
+            }
+            else
+            {
+                path = "add.txt";
+            }
             using (StreamReader reader = new StreamReader(path))
             {
-                while (reader.EndOfStream)
+                while (!reader.EndOfStream)
                 {
                     var firstStringProrerties = reader.ReadLine().Split(". ");
                     var noteIndex = int.Parse(firstStringProrerties[0].Skip(9).ToArray());
@@ -51,7 +79,7 @@ namespace Homework_07
                     var noteCategory = new string(reader.ReadLine().Skip(10).ToArray());
                     
                     Note note = new Note(noteIndex, noteDate, noteCaption, noteDescription, noteAuthor, noteCategory);
-                    notes = notes.Append(note).ToArray();
+                    Notes = Notes.Append(note).ToArray();
 
                     reader.ReadLine();
                     reader.ReadLine();
@@ -65,7 +93,7 @@ namespace Homework_07
         /// </summary>
         public void AddNote()
         {
-            int noteIndex = notes.Length;
+            int noteIndex = Notes.Length;
             Console.WriteLine($"Добавление записи: Запись №{noteIndex}");
             Console.Write($"Введите время: ");
             DateTime noteDataTime = DateTime.Parse(Console.ReadLine());
@@ -79,7 +107,7 @@ namespace Homework_07
             string noteCategory = Console.ReadLine();
 
             Note note = new Note(noteIndex, noteDataTime, noteCaption, noteDescription, noteAuthor, noteCategory);
-            notes = notes.Append(note).ToArray();
+            Notes = Notes.Append(note).ToArray();
         }
 
         /// <summary>
@@ -88,9 +116,9 @@ namespace Homework_07
         /// <param name="index"></param>
         public void DeleteByIndex(int index)
         {
-            var tmpList = notes.ToList();
+            var tmpList = Notes.ToList();
             tmpList.RemoveAt(index);
-            notes = tmpList.ToArray();
+            Notes = tmpList.ToArray();
         }
 
         /// <summary>
@@ -104,42 +132,30 @@ namespace Homework_07
             {
                 case "1":
                     Console.WriteLine("Введите дату и время:");
-                    notes[index].Date = DateTime.Parse(Console.ReadLine());
+                    Notes[index].Date = DateTime.Parse(Console.ReadLine());
                     break;
                 case "2":
                     Console.WriteLine("Введите название:");
-                    notes[index].Caption = Console.ReadLine();
+                    Notes[index].Caption = Console.ReadLine();
                     break;
                 case "3":
                     Console.WriteLine("Введите описание:");
-                    notes[index].Description = Console.ReadLine();
+                    Notes[index].Description = Console.ReadLine();
                     break;
                 case "4":
                     Console.WriteLine("Введите автора:");
-                    notes[index].Author = Console.ReadLine();
+                    Notes[index].Author = Console.ReadLine();
                     break;
                 case "5":
                     Console.WriteLine("Введите категорию:");
-                    notes[index].Category = Console.ReadLine();
+                    Notes[index].Category = Console.ReadLine();
                     break;
                 default:
                     Console.WriteLine("Неверный ввод");
                     break;
             }
         }
-
-        /// <summary>
-        /// Печать всех заметок в консоль
-        /// </summary>
-        public void Print()
-        {
-            Console.Clear();
-            foreach (var note in notes)
-            {
-                Console.WriteLine($"Заметка №{note.Index}. {note.Date}. {note.Caption}\n{note.Description}\nАвтор:{note.Author}\nКатегория:{note.Category}\n\n");
-            }
-        }
-
+        
         /// <summary>
         /// Сортировка заметок по одному из свойств
         /// </summary>
@@ -149,22 +165,22 @@ namespace Homework_07
             switch (noteProperties)
             {
                 case NoteProperties.Index:
-                    notes = notes.OrderBy(x => x.Index).ToArray();
+                    Notes = Notes.OrderBy(x => x.Index).ToArray();
                     break;
                 case NoteProperties.Date:
-                    notes = notes.OrderBy(x => x.Date).ToArray();
+                    Notes = Notes.OrderBy(x => x.Date).ToArray();
                     break;
                 case NoteProperties.Caption:
-                    notes = notes.OrderBy(x => x.Caption).ToArray();
+                    Notes = Notes.OrderBy(x => x.Caption).ToArray();
                     break;
                 case NoteProperties.Description:
-                    notes = notes.OrderBy(x => x.Description).ToArray();
+                    Notes = Notes.OrderBy(x => x.Description).ToArray();
                     break;
                 case NoteProperties.Author:
-                    notes = notes.OrderBy(x => x.Author).ToArray();
+                    Notes = Notes.OrderBy(x => x.Author).ToArray();
                     break;
                 case NoteProperties.Category:
-                    notes = notes.OrderBy(x => x.Category).ToArray();
+                    Notes = Notes.OrderBy(x => x.Category).ToArray();
                     break;
                 default:
                     break;

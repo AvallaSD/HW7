@@ -27,8 +27,20 @@ namespace Homework_07
             /// - Упорядочивания записей ежедневника по выбранному полю
 
             Notebook notebook = new Notebook();
-            
+            notebook.ReadFromFile(Notebook.ReadMode.Replace);
+            PrintNotes(notebook.Notes);
+            notebook.DeleteByIndex(2);
+            PrintNotes(notebook.Notes);
+            Console.ReadKey();
+        }
 
+        public static void PrintNotes(Note[] notes)
+        {
+            Console.Clear();
+            foreach (var note in notes)
+            {
+                Console.WriteLine($"Заметка №{note.Index}. {note.Date}. {note.Caption}\n{note.Description}\nАвтор:{note.Author}\nКатегория:{note.Category}\n\n");
+            }
         }
     }
 }
