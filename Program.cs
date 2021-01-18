@@ -28,11 +28,45 @@ namespace Homework_07
 
             Notebook notebook = new Notebook();
             notebook.ReadFromFile(Notebook.ReadMode.Replace);
-            PrintNotes(notebook.Notes);
+
+            Console.WriteLine("***Программа ежедневник. Нажмите любую клавишу для продолжения...***");
             Console.ReadKey();
-            notebook.ReadFromFile(Notebook.ReadMode.Add, "add.txt");
-            PrintNotes(notebook.Notes);
-            Console.ReadKey();
+
+            bool flag = true;
+            while (flag == true)
+            {
+                Console.Clear();       
+                Console.WriteLine("***ГЛАВНОЕ МЕНЮ***");
+                Console.WriteLine("1) Загрузить заметки из файла");
+                Console.WriteLine("2) Выгрузить заметки в файл");
+                Console.WriteLine("3) Создать заметку");
+                Console.WriteLine("4) Редактировать заметку");
+                Console.WriteLine("5) Удалить заметку");
+                Console.WriteLine("6) Сортировать заметки");
+                Console.WriteLine("7) Выход");
+
+                switch (Console.ReadKey().KeyChar)
+                {
+                    case '1':
+                        break;
+                    case '2':
+                        break;
+                    case '3':
+                        break;
+                    case '4':
+                        break;
+                    case '5':
+                        break;
+                    case '6':
+                        break;
+                    case '7':
+                        flag = false;
+                        break;
+                    default:
+                        break;
+                }
+            }
+           
         }
 
         public static void PrintNotes(Note[] notes)

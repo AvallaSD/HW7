@@ -63,7 +63,7 @@ namespace Homework_07
         /// <param name="mode"></param>
         public void ReadFromFile(ReadMode mode)
         {
-            ReadFromFile("input.txt", mode, DateTime.MinValue, DateTime.MaxValue);
+            ReadFromFile( mode, "input.txt", DateTime.MinValue, DateTime.MaxValue);
         }
 
         /// <summary>
@@ -71,9 +71,9 @@ namespace Homework_07
         /// </summary>
         /// <param name="path">Путь к файлу</param>
         /// <param name="mode">Режим загрузки</param>
-        public void ReadFromFile(string path, ReadMode mode)
+        public void ReadFromFile(ReadMode mode, string path)
         {
-            ReadFromFile(path, mode, DateTime.MinValue, DateTime.MaxValue);
+            ReadFromFile(mode, path, DateTime.MinValue, DateTime.MaxValue);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Homework_07
         /// <param name="mode">Режим загрузки</param>
         /// <param name="dateFrom">Дата и время От</param>
         /// <param name="dateTo">Дата и время До</param>
-        public void ReadFromFile(string path, ReadMode mode, DateTime dateFrom, DateTime dateTo)
+        public void ReadFromFile(ReadMode mode, string path, DateTime dateFrom, DateTime dateTo)
         {
             if (mode == ReadMode.Replace)
             {
@@ -114,12 +114,7 @@ namespace Homework_07
         /// <summary>
         /// Добавление заметки
         /// </summary>
-        public void AddNote(int noteIndex,
-                            DateTime noteDateTime,
-                            string noteCaption,
-                            string noteDescription,
-                            string noteAuthor,
-                            string noteCategory)
+        public void AddNote(int noteIndex, DateTime noteDateTime, string noteCaption, string noteDescription, string noteAuthor, string noteCategory)
         {
             
 
