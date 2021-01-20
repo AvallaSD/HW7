@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Homework_07
+namespace HW7
 {
     /// <summary>
     /// Заметка
     /// </summary>
     class Note
     {
-       
+
         /// <summary>
         /// Индекс
         /// </summary>
@@ -21,17 +17,17 @@ namespace Homework_07
         /// Дата
         /// </summary>
         public DateTime Date { get; set; }
-        
+
         /// <summary>
         /// Заголовок
         /// </summary>
         public string Caption { get; set; }
-        
+
         /// <summary>
         /// Описание заметки
         /// </summary>
         public string Description { get; set; }
-        
+
         /// <summary>
         /// Автор заметки
         /// </summary>
@@ -52,6 +48,6 @@ namespace Homework_07
             Category = category;
         }
 
-        
+
     }
 }

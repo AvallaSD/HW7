@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Homework_07
+namespace HW7
 {
     /// <summary>
     /// Класс, содержащий в себе заметки и методы работы с ними.
@@ -39,42 +36,9 @@ namespace Homework_07
         /// </summary>
         public Notebook()
         {
-            Notes = new Note[0];         
+            Notes = new Note[0];
         }
 
-        /// <summary>
-        /// Печать заметок в файл
-        /// </summary>
-        /// <param name="path"></param>
-        public void PrintInFile(string path = "output.txt")
-        {
-            using (StreamWriter writer = new StreamWriter(path))
-            {
-                foreach (var note in Notes)
-                {
-                    writer.WriteLine($"Заметка №{note.Index}. {note.Date}. {note.Caption}\n{note.Description}\nАвтор:{note.Author}\nКатегория:{note.Category}\n\n");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Загружает заметки из файла "input.txt" в соответствии с выбранным режимом
-        /// </summary>
-        /// <param name="mode"></param>
-        public void ReadFromFile(ReadMode mode)
-        {
-            ReadFromFile( mode, "input.txt", DateTime.MinValue, DateTime.MaxValue);
-        }
-
-        /// <summary>
-        /// Загружает заметки из файла, имеющего указанный путь. Выбор режима загрузки: добавить или заменить.
-        /// </summary>
-        /// <param name="path">Путь к файлу</param>
-        /// <param name="mode">Режим загрузки</param>
-        public void ReadFromFile(ReadMode mode, string path)
-        {
-            ReadFromFile(mode, path, DateTime.MinValue, DateTime.MaxValue);
-        }
 
         /// <summary>
         /// Загружает заметки из файла, имеющего указанный путь. Выбор режима загрузки: добавить или заменить. Выбор диапазона времени и дат
@@ -87,9 +51,11 @@ namespace Homework_07
         {
             if (mode == ReadMode.Replace)
             {
-                Notes = new Note[0];              
+                Notes = new Note[0];
             }
-           
+
+            if (path == "") path = "input.txt";
+
             using (StreamReader reader = new StreamReader(path))
             {
                 while (!reader.EndOfStream)
@@ -101,8 +67,13 @@ namespace Homework_07
                     var noteDescription = reader.ReadLine();
                     var noteAuthor = new string(reader.ReadLine().Skip(6).ToArray());
                     var noteCategory = new string(reader.ReadLine().Skip(10).ToArray());
-                    
+
                     Note note = new Note(noteIndex, noteDate, noteCaption, noteDescription, noteAuthor, noteCategory);
+
+                    if (noteDate > dateFrom && noteDate < dateTo)
+                    {
+                        Notes = Notes.Append(note).ToArray();
+                    }
                     Notes = Notes.Append(note).ToArray();
 
                     reader.ReadLine();
@@ -116,7 +87,7 @@ namespace Homework_07
         /// </summary>
         public void AddNote(int noteIndex, DateTime noteDateTime, string noteCaption, string noteDescription, string noteAuthor, string noteCategory)
         {
-            
+
 
             Note note = new Note(noteIndex, noteDateTime, noteCaption, noteDescription, noteAuthor, noteCategory);
             Notes = Notes.Append(note).ToArray();
@@ -167,7 +138,7 @@ namespace Homework_07
                     break;
             }
         }
-        
+
         /// <summary>
         /// Сортировка заметок по одному из свойств
         /// </summary>
@@ -196,6 +167,46 @@ namespace Homework_07
                     break;
                 default:
                     break;
+            }
+        }
+
+        /// <summary>
+        /// Запись заметок в файл
+        /// </summary>
+        /// <param name="path">Путь к файлу</param>
+        public void WriteInFile(string path)
+        {
+            if (path == "")
+            {
+                path = "output.txt";
+            }
+            using (StreamWriter writer = new StreamWriter(path))
+            {
+                foreach (var note in Notes)
+                {
+                    writer.WriteLine($"Заметка №{note.Index}. {note.Date}. {note.Caption}");
+                    writer.WriteLine(note.Description);
+                    writer.WriteLine($"Автор:{note.Author}");
+                    writer.WriteLine($"Категория:{note.Category}\n\n");
+                }
+            }
+        }
+
+        public void CorrectIndexes()
+        {
+            if (Notes.Select(x => x.Index) == Notes.Select(x => x.Index).Distinct())
+            {
+                return;
+            }
+            else
+            {
+                for (int i = 0; i < Notes.Length; i++)
+                {
+                    while (Notes.Select(x => x.Index).Contains(Notes[i].Index))
+                    {
+                        Notes[i].Index++;
+                    }              
+                }
             }
         }
     }
